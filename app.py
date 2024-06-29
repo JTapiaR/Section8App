@@ -176,7 +176,13 @@ if selected_counties:
         
         # Mostrar tabla con propiedades Section 8
         st.write("### Section 8 Properties")
-        st.dataframe(section_8_properties[[
+        search = st.text_input("Search properties", "")
+
+        # Filtrar el DataFrame según la búsqueda
+        filtered_data = section_8_properties[
+        section_8_properties.apply(lambda row: row.astype(str).str.contains(search, case=False).any(), axis=1)
+]
+        st.dataframe(filtered_data[[
             "sizediff",
             "zpid",
             "parcelId",
