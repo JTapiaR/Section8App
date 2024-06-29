@@ -32,7 +32,9 @@ def load_data():
     df = pd.read_csv('Datos/Data_Final2.csv')
     df['yearBuilt'] = df['yearBuilt'].astype(str)
     df['zpid'] = df['zpid'].astype(str)
-    df['sizediff'] = df['FRM'] - df['rent_estimate']  # Crear la columna sizediff
+    df['price_sq_foot'] = df['price_sq_foot'].apply(lambda d: f'{round(d, 2):,}')
+    df['sizediff'] = df['FRM'] - df['rent_estimate']
+    df['sizediff'] = df['sizediff'].apply(lambda d: f'{round(d, 2):,}')  # Crear la columna sizediff
     return df
 
 @st.cache_data
@@ -156,7 +158,7 @@ if selected_counties:
             layers=layers,
             initial_view_state=view_state,
             tooltip={
-                "text": "Price per Sq Foot: {price_sq_foot}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
+                "text": "zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
             }
         )
 
