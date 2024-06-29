@@ -158,7 +158,7 @@ if selected_counties:
             layers=layers,
             initial_view_state=view_state,
             tooltip={
-                "text": "zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
+                "text": "zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nURL: {detailUrl_InfoTOD}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
             }
         )
 
