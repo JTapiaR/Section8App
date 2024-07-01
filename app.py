@@ -32,7 +32,8 @@ def load_data():
     df = pd.read_csv('Datos/Data_Final2.csv')
     df['yearBuilt'] = df['yearBuilt'].astype(str)
     df['zpid'] = df['zpid'].astype(str)
-    df['sizediff'] = df['FRM'] - df['rent_estimate']  # Crear la columna sizediff
+    df['price_sq_foot'] = df['price_sq_foot'].apply(lambda d: f'{round(d, 2):,}')
+    df['sizediff'] = df['sizediff'].apply(lambda d: f'{round(d, 2):,}')  # Crear la columna sizediff
     return df
 
 @st.cache_data
@@ -156,7 +157,7 @@ if selected_counties:
             layers=layers,
             initial_view_state=view_state,
             tooltip={
-                "text": "Price per Sq Foot: {price_sq_foot}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
+                "zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nURL: {detailUrl_InfoTOD}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
             }
         )
 
@@ -169,7 +170,7 @@ if selected_counties:
         if selected_point is not None:
             selected_data = display_df.loc[selected_point]
             st.markdown(f"""
-            <div style='background-color: lightgray; padding: 10px; border-radius: 5px;'>
+            <div style='background-color: DarkGreen; padding: 10px; border-radius: 5px;'>
                 <strong>Price per Sq Foot:</strong> {selected_data['price_sq_foot']}<br>
                 <strong>Bedrooms:</strong> {selected_data['bedrooms']}<br>
                 <strong>Section 8:</strong> {'Yes' if selected_data['Section_8'] == 1 else 'No'}<br>
@@ -182,6 +183,7 @@ if selected_counties:
         st.markdown("""
         <div style='background-color: black; color: white; padding: 5px; border-radius: 5px; display: inline-block;'>
             <strong>Legend:</strong> <span style='color: green;'>● Section 8</span> <span style='color: red;'>● Non Section 8</span>
+            <strong> El tamaño del punto verde implica mayor diferencia entre FRM y<strong>
         </div>
         """, unsafe_allow_html=True)
 
