@@ -32,9 +32,7 @@ def load_data():
     df = pd.read_csv('Datos/Data_Final2.csv')
     df['yearBuilt'] = df['yearBuilt'].astype(str)
     df['zpid'] = df['zpid'].astype(str)
-    df['price_sq_foot'] = df['price_sq_foot'].apply(lambda d: f'{round(d, 2):,}')
-    df['sizediff'] = df['FRM'] - df['rent_estimate']
-    df['sizediff'] = df['sizediff'].apply(lambda d: f'{round(d, 2):,}')  # Crear la columna sizediff
+    df['sizediff'] = df['FRM'] - df['rent_estimate']  # Crear la columna sizediff
     return df
 
 @st.cache_data
@@ -126,7 +124,7 @@ if selected_counties:
             data=display_df[display_df['Section_8'] == 1],
             get_position='[longitude, latitude]',
             get_color='color',
-            get_radius='sizediff /5',  # Tamaño del marcador basado en sizediff
+            get_radius='sizediff / 5',  # Tamaño del marcador basado en sizediff
             pickable=True,
             auto_highlight=True,
         )
@@ -158,12 +156,27 @@ if selected_counties:
             layers=layers,
             initial_view_state=view_state,
             tooltip={
-                "text": "zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nURL: {detailUrl_InfoTOD}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
+                "text": "Price per Sq Foot: {price_sq_foot}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
             }
         )
 
         # Mostrar el mapa en Streamlit
-        st.pydeck_chart(r)
+        st.pydeck_chart(r, use_container_width=True)
+
+        # Mostrar información adicional al hacer clic en un punto
+        selected_point = st.selectbox("Select a property point", display_df.index, format_func=lambda x: f"Property {x}")
+
+        if selected_point is not None:
+            selected_data = display_df.loc[selected_point]
+            st.markdown(f"""
+            <div style='background-color: lightgray; padding: 10px; border-radius: 5px;'>
+                <strong>Price per Sq Foot:</strong> {selected_data['price_sq_foot']}<br>
+                <strong>Bedrooms:</strong> {selected_data['bedrooms']}<br>
+                <strong>Section 8:</strong> {'Yes' if selected_data['Section_8'] == 1 else 'No'}<br>
+                <strong>Spread FRM-RentEstimated:</strong> {selected_data['sizediff']}<br>
+                <strong><a href='{selected_data['detailUrl_InfoTOD']}' target='_blank'>More Details</a></strong>
+            </div>
+            """, unsafe_allow_html=True)
 
         # Leyenda para los colores
         st.markdown("""
@@ -173,16 +186,10 @@ if selected_counties:
         """, unsafe_allow_html=True)
 
         section_8_properties = filtered_county_df[filtered_county_df['Section_8'] == 1]
-        
+
         # Mostrar tabla con propiedades Section 8
         st.write("### Section 8 Properties")
-        search = st.text_input("Search properties", "")
-
-        # Filtrar el DataFrame según la búsqueda
-        filtered_data = section_8_properties[
-        section_8_properties.apply(lambda row: row.astype(str).str.contains(search, case=False).any(), axis=1)
-]
-        st.dataframe(filtered_data[[
+        st.dataframe(section_8_properties[[
             "sizediff",
             "zpid",
             "parcelId",
@@ -201,26 +208,12 @@ if selected_counties:
             "homeType",
             "description"
         ]].rename(columns={
-            "sizediff":"Spread_FRM-RentEstimated",
+            "sizediff": "Spread_FRM-RentEstimated",
             "zpid": "Zpid",
             "parcelId": "ParcelId",
             "detailUrl_InfoTOD": "URL",
-            "FRM": "Fair_Rent_Market",
-            "rent_estimate": "Rent_Estimate",
-            "price": "Price",
-            "livingArea": "Living_Area",
-            "price_sq_foot": "Price_sq_foot",
-            "bedrooms": "No._Bedrooms",
-            "yearBuilt": "Year_Built",
-            "lastSoldPrice": "Last_Sold_Price",
-            "price_to_rent_ratio_InfoTOD": "Price_to_Rent_Ratio",
-            "MeanPricesnearbyHomes": "MeanPrices_NearbyHomes",
-            "SCHOOLSMeandistance": "Mean_Distance_NearSchools",
-            "homeType": "Home_type",
-            "description": "Description"
-        }), use_container_width=True)
-else:
-    st.write("Please select at least one county to view the data.")
+            "FR
+
 
 
 
