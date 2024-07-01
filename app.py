@@ -178,7 +178,7 @@ if selected_counties:
         if selected_zpid is not None:
             selected_data = display_df[display_df['zpid'] == selected_zpid].iloc[0]
             st.markdown(f"""
-            <div style='background-color: lightgray; padding: 10px; border-radius: 5px;'>
+            <div style='background-color: DarkGreen; padding: 10px; border-radius: 5px;'>
                 <strong>Price per Sq Foot:</strong> {selected_data['price_sq_foot']}<br>
                 <strong>Bedrooms:</strong> {selected_data['bedrooms']}<br>
                 <strong>Section 8:</strong> {'Yes' if selected_data['Section_8'] == 1 else 'No'}<br>
