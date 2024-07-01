@@ -212,7 +212,22 @@ if selected_counties:
             "zpid": "Zpid",
             "parcelId": "ParcelId",
             "detailUrl_InfoTOD": "URL",
-            "FR
+            "FRM": "Fair_Rent_Market",
+            "rent_estimate": "Rent_Estimate",
+            "price": "Price",
+            "livingArea": "Living_Area",
+            "price_sq_foot": "Price_sq_foot",
+            "bedrooms": "No._Bedrooms",
+            "yearBuilt": "Year_Built",
+            "lastSoldPrice": "Last_Sold_Price",
+            "price_to_rent_ratio_InfoTOD": "Price_to_Rent_Ratio",
+            "MeanPricesnearbyHomes": "MeanPrices_NearbyHomes",
+            "SCHOOLSMeandistance": "Mean_Distance_NearSchools",
+            "homeType": "Home_type",
+            "description": "Description"
+        }), use_container_width=True)
+else:
+    st.write("Please select at least one county to view the data.")
 
 
 
