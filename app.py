@@ -157,12 +157,19 @@ if selected_counties:
             layers=layers,
             initial_view_state=view_state,
             tooltip={
-                "zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nURL: {detailUrl_InfoTOD}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
+                "text":"zpid: {zpid}\nPrice per Sq Foot: {price_sq_foot}\nURL: {detailUrl_InfoTOD}\nBedrooms: {bedrooms}\nSection 8: {Section_8}\nSpread FRM-RentEstimated: {sizediff}"
             }
         )
 
         # Mostrar el mapa en Streamlit
         st.pydeck_chart(r, use_container_width=True)
+                # Leyenda para los colores
+        st.markdown("""
+        <div style='background-color: black; color: white; padding: 5px; border-radius: 5px; display: inline-block;'>
+            <strong>Legend:</strong> <span style='color: green;'>● Section 8</span>  <strong> The size of the green dot means difference between FRM and Rent Estimated>
+            <span style='color: red;'>● Non Section 8</span>   
+        </div>
+        """, unsafe_allow_html=True)
 
         # Mostrar información adicional al hacer clic en un punto
         selected_point = st.selectbox("Select a property point", display_df.index, format_func=lambda x: f"Property {x}")
@@ -178,14 +185,6 @@ if selected_counties:
                 <strong><a href='{selected_data['detailUrl_InfoTOD']}' target='_blank'>More Details</a></strong>
             </div>
             """, unsafe_allow_html=True)
-
-        # Leyenda para los colores
-        st.markdown("""
-        <div style='background-color: black; color: white; padding: 5px; border-radius: 5px; display: inline-block;'>
-            <strong>Legend:</strong> <span style='color: green;'>● Section 8</span> <span style='color: red;'>● Non Section 8</span>
-            <strong> El tamaño del punto verde implica mayor diferencia entre FRM y<strong>
-        </div>
-        """, unsafe_allow_html=True)
 
         section_8_properties = filtered_county_df[filtered_county_df['Section_8'] == 1]
 
