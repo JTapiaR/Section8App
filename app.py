@@ -33,6 +33,7 @@ def load_data():
     df['yearBuilt'] = df['yearBuilt'].astype(str)
     df['zpid'] = df['zpid'].astype(str)
     df['price_sq_foot'] = df['price_sq_foot'].apply(lambda d: f'{round(d, 2):,}')
+    df['sizediff'] = df['FRM'] - df['rent_estimate']
     df['sizediff'] = df['sizediff'].apply(lambda d: f'{round(d, 2):,}')  # Crear la columna sizediff
     return df
 
